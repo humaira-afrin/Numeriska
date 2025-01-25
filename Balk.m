@@ -38,4 +38,4 @@ while diffx > tol && iter < maxiter
     h1 = hnew;
     disp([iter, hnew, diffx]); 
 end
-T = hnew
+T = hnew;
