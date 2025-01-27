@@ -3,12 +3,12 @@ H = 0.5;
 f = @(x) 8 * exp(-x/2) * cos(3 * x) - H; % funktionen
 fp = @(x) -4 * exp(-x/2) * cos(3 * x) + 24 * exp(-x/2) * sin(3 * x); % derivatan av funktionen
 
-x = 4.6; % Startgissning (måste ändras för nu divergerar funtionen wierd)
+x = 4.5; % Startgissning (måste ändras för nu divergerar funtionen wierd)
 tol = 1e-8; % Tolerans
 diffx = 1; iter = 0; maxiter = 100;
 
 while diffx > tol && iter < maxiter % sålänge diff är större än tolerasen
-    iter = iter + 1; % öka anta iterationer
+    iter = iter + 1; % öka antal iterationer
     xnew = x - (f ( x ) / fp ( x )) ; % Räkna xn+1=xn-(f(x)/f'(x)) 
     diffx = abs ( xnew - x ) ; % skillnaden/längden mellan två pinkter:  | x ( n +1) -x ( n ) |
     x = xnew ; % Uppdatera xn med värdet av xn+1, alltså stargissningen uppdateras
