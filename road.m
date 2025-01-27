@@ -1,4 +1,5 @@
 % Här fyller du i ekvationerna i systemet
+
 %     xA, yA 
 A = [175, 950;
      410, 2400;
@@ -16,62 +17,88 @@ L = [ 60 , 46;
 
 
 
-f = @(x1,y1,x2,y2,x3,y2) [
+f = @(x1,y1,x2,y2,x3,y3) [
     (x1 - A(1,1))^2 + (y1 - A(1,2))^2 + 0 + 0 + 0 + 0 - (L(1,1)^2);
     (x1 - B(1,1))^2 + (y1 - B(1,2))^2 + 0 + 0 + 0 + 0 - (L(1,2)^2);
     0 + 0 + (x2 - A(2,1))^2 + (y2 - A(2,2))^2 + 0 + 0 - (L(2,1)^2);
     0 + 0 + (x2 - B(2,1))^2 + (y2 - B(2,2))^2 + 0 + 0 - (L(2,2)^2);
-    (x3 - A(3,1))^2 + (y3 - A(3,2))^2 + 0 + 0 + 0 + 0 - (L(3,1)^2);
+    0 + 0 + 0 + 0 + (x3 - A(3,1))^2 + (y3 - A(3,2))^2 - (L(3,1)^2);
     0 + 0 + 0 + 0 + (x3 - B(3,1))^2 + (y3 - B(3,2))^2 - (L(3,2)^2);
 
    
 ];
- %{
+
+
 % Här fyller du i komponenterna i Jacobianen
-J = @(x, y, z) [
-    2*(x - x1o), 2*(y - y1o), 2*(z - z1o);
-    2*(x - x2o), 2*(y - y2o), 2*(z - z2o);
-    2*(x - x3o), 2*(y - y3o), 2*(z - z3o)
+J = @(x1,y1,x2,y2,x3,y3) [
+    2* (x1 - A(1,1)), 2*(y1 - A(1,2)), 0, 0, 0, 0;
+    2*(x1 - B(1,1)), 2*(y1 - B(1,2)), 0, 0, 0, 0;
+    0, 0, 2*(x2 - A(2,1)), 2*(y2 - A(2,2)), 0, 0;
+    0, 0, 2*(x2 - B(2,1)), 2*(y2 - B(2,2)), 0, 0;
+    0, 0, 0, 0, 2*(x3 - A(3,1)), 2*(y3 - A(3,2));
+    0, 0, 0, 0, 2*(x3 - B(3,1)), 2*(y3 - B(3,2));
 ];
 
-% Kontrollerar att ekvationerna och Jacobianen är korrekt
-fkoll=f(10,10,10);
-Jkoll=J(10,10,10);
+% Startgissning
+x1start=[200, 300];  
+y1start=[1000, 1500];
+x2start=[400,500];  
+y2start=[0, 2];  
+x3start=[3, -3];  
+y3start=[0, 2];  
 
-
-xstart=[3, -3];  % fyll i startgissning för x (ett värde för varje skärningspunkt)
-ystart=[0, 2];  % fyll i startgissning för y (ett värde för varje skärningspunkt)
-zstart=[1, -1];  % fyll i startgissning för z (ett värde för varje skärningspunkt)
 
 tol=1e-11;
 for i=1:2   % loopa över de två skärningspunkterna
-    x=xstart(i);
-    y=ystart(i);
-    z=zstart(i);
+    x1=x1start(i);
+    y1=y1start(i);
+    x2=x2start(i);
+    y2=y2start(i);
+    x3=x3start(i);
+    y3=y3start(i);
+   
     
-    % Här ska Newtons metod implementeras
+    % Här Newtons metod implementeras
     hnorm = 1; iter = 0;
     while hnorm > tol && iter < 20
         iter = iter + 1;
-        h = -J ( x,y,z ) \ f ( x,y,z ) ; % Los linjara ekvsystemet
-        x = x + h(1) ; y= y+h(2) ; z=z+h(3); % Uppdatera
+        h = -J ( x1,y1,x2,y2,x3,y3 ) \ f ( x1,y1,x2,y2,x3,y3 ) ; % Los linjara ekvsystemet
+       % Uppdatera
+        x1 = x1 + h(1) ; y1= y1+h(2) ; 
+        x2=x2+h(3); y2 = y2+h(4);
+        x3 = x3 + h(5); y3 = y3 + h(6);
+
         hnorm = norm ( h ) ;
-        disp ([ iter x y z hnorm ])
+        disp ([ iter x1 y1 x2 y2 x3 y3 hnorm ])
     end
 
 
 
     % När Newton är klar, lagra resultatet i radvektorerna 
     % xrot, yrot, zrot (ett värde för varje skärningspunkt)
-    xrot(i) = x;
-    yrot(i) =y;
-    zrot(i) = z;
+    x1rot(i) = x1;
+    y1rot(i) =y1;
+    x2rot(i) = x2;
+    y2rot(i) =y2;
+    x3rot(i) = x3;
+    y3rot(i) =y3;
 end
 
-rot1 = [xrot(1), yrot(1), zrot(1)];
-rot2 = [xrot(2), yrot(2), zrot(2)];
+rotP11 = [x1rot(1), y1rot(1)];
+rotP12 = [x1rot(2), y1rot(2)];
+
+rotP21 = [x2rot(1), y2rot(1)];
+rotP22 = [x2rot(2), y2rot(2)];
+
+rotP31 = [x3rot(1), y3rot(1)];
+rotP32 = [x3rot(2), y3rot(2)];
+
 disp("Intersection points:");
-disp(rot1);
-disp(rot2); 
-%}
+disp(rotP11);
+disp(rotP12); 
+disp(rotP21);
+disp(rotP22); 
+disp(rotP31);
+disp(rotP32); 
+
 
