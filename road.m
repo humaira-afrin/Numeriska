@@ -3,17 +3,17 @@
 %     xA, yA 
 A = [175, 950;
      410, 2400;
-     675, 1730]
+     675, 1730];
 
 %    xB , yB
 B = [160, 1008;
       381, 2500 ;
-      656, 1760]
+      656, 1760];
 
 %     LA , LB
 L = [ 60 , 46;
       75 , 88;
-      42 , 57]
+      42 , 57];
 
 
 
@@ -40,12 +40,12 @@ J = @(x1,y1,x2,y2,x3,y3) [
 ];
 
 % Startgissning
-x1start=[200, 300];  
-y1start=[1000, 1500];
-x2start=[400,500];  
-y2start=[0, 2];  
-x3start=[3, -3];  
-y3start=[0, 2];  
+x1start=[205, 123];  
+y1start=[1001, 980];
+x2start=[458,338];  
+y2start=[2457, 2422];  
+x3start=[713, 653];  
+y3start=[713, 1757];  
 
 
 tol=1e-11;
@@ -69,7 +69,7 @@ for i=1:2   % loopa över de två skärningspunkterna
         x3 = x3 + h(5); y3 = y3 + h(6);
 
         hnorm = norm ( h ) ;
-        disp ([ iter x1 y1 x2 y2 x3 y3 hnorm ])
+        %disp ([ iter x1 y1 x2 y2 x3 y3 hnorm ])
     end
 
 
@@ -93,12 +93,18 @@ rotP22 = [x2rot(2), y2rot(2)];
 rotP31 = [x3rot(1), y3rot(1)];
 rotP32 = [x3rot(2), y3rot(2)];
 
-disp("Intersection points:");
+disp("Intersection points: both roots for P1, P2 and P3");
+disp("P1 root 1");
 disp(rotP11);
-disp(rotP12); 
+disp("P1 root 2");
+disp(rotP12);
+disp("P2 root 1");
 disp(rotP21);
+disp("P2 root 2");
 disp(rotP22); 
+disp("P3 root 1");
 disp(rotP31);
+disp("P3 root 2");
 disp(rotP32); 
 
 
