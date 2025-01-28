@@ -1,4 +1,4 @@
-% Uppgift 2a Newtons metod (har lite problem med startgissning)
+% Uppgift 2a Newtons metod 
 H = 0.5;
 f = @(x) 8 * exp(-x/2) * cos(3 * x) - H; % funktionen
 fp = @(x) -4 * exp(-x/2) * cos(3 * x) - 24 * exp(-x/2) * sin(3 * x); % derivatan av funktionen
@@ -21,7 +21,7 @@ T_newton=x %resultat
 
 %---------_________________-----------------_______________________-----------------------___________________
 
-% Uppgift 2b : Secant method (funkar bra)
+% Uppgift 2b : Secant method 
 H=0.5;
 g = @(x) 8 * exp(-x/2) * cos(3 * x) - H; % funitionen
 % Startgissning
@@ -61,7 +61,7 @@ legend('Sekant', 'Newton');
 
 %________----------------_________________------------------___________________------------------------_____
 
-% Uppgift 2d (måste fixa probelemt med startgissning, samma problem som i 2a)
+% Uppgift 2d 
 H = 2.8464405473 ; % byt H = 2.8464405473 
 v = @(x) 8 * exp(-x/2) * cos(3 * x) - H; % funktionen
 vp = @(x) -4 * exp(-x/2) * cos(3 * x) - 24 * exp(-x/2) * sin(3 * x); % derivatan av funktionen
