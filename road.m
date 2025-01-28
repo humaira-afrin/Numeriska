@@ -131,7 +131,7 @@ disp(rotP32);
 
 % Konvergenshastighet
 figure;
-semilogy(0:length(diffx)-1, diffx,'LineWidth',1);
+semilogy(1:length(diffx), diffx,'LineWidth',1);
 xlabel('iterationer')
 ylabel('Normen')
 
@@ -142,17 +142,35 @@ ylabel('Normen')
 % Ac=b
 P0=[0;0];
 P4=[1020;0];
-b=[P0(2),rotP11(2),rotP21(2),rotP31(2),P4(2)]';
-A=[ones(1,5);
-    P0(1),rotP11(1), rotP21(1),rotP31(1),P4(1);
-    P0(1),(rotP11(1)^2), (rotP21(1)^2),(rotP31(1)^2),(P4(1)^2);
-    P0(1),rotP11(1)^3, rotP21(1)^3,rotP31(1)^3,P4(1)^3;
-    P0(1),rotP11(1)^4, rotP21(1)^4,rotP31(1)^4,P4(1)^4;
-    ]';
+rot_y = [P0(2), rotP11(2), rotP21(2), rotP31(2), P4(2)]';
+rot_x = [P0(1), rotP11(1), rotP21(1), rotP31(1), P4(1)]';
+d = length(b);
 
-c=A\b
+
+A1 = [ones(d, 1), rot_x, rot_x.^2, rot_x.^3, rot_x.^4];
+%{
+A=[ones(1,5); % konstanta termen 
+    P0(1),rotP11(1), rotP21(1),rotP31(1),P4(1); % linjärna termen x
+    P0(1),(rotP11(1)^2), (rotP21(1)^2),(rotP31(1)^2),(P4(1)^2); % kvadratiska termen x^2
+    P0(1),rotP11(1)^3, rotP21(1)^3,rotP31(1)^3,P4(1)^3; % x^3
+    P0(1),rotP11(1)^4, rotP21(1)^4,rotP31(1)^4,P4(1)^4; % x^4
+    ]'
+%}
+
+c=A1\rot_y
 
 p = @(x) c(1) + c(2).*x + c(3).*x.^2 + c(4).*x.^3 + c(5).*x.^4;
+
+figure;
+grid on;
+fplot(p,[0,1020],'LineWidth',1);
+hold on;
+plot(rot_x,rot_y,'o','LineWidth',2)
+xlabel('x-koordinater')
+ylabel('ykoordinater')
+
+
+%{
 figure;
 grid on;
 fplot(p,[0,1020],'LineWidth',1);
@@ -160,3 +178,4 @@ hold on;
 plot(A(:,2),b,'o','LineWidth',2)
 xlabel('x-koordinater')
 ylabel('ykoordinater')
+%}

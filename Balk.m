@@ -1,9 +1,9 @@
 % Uppgift 2a Newtons metod (har lite problem med startgissning)
 H = 0.5;
 f = @(x) 8 * exp(-x/2) * cos(3 * x) - H; % funktionen
-fp = @(x) -4 * exp(-x/2) * cos(3 * x) + 24 * exp(-x/2) * sin(3 * x); % derivatan av funktionen
+fp = @(x) -4 * exp(-x/2) * cos(3 * x) - 24 * exp(-x/2) * sin(3 * x); % derivatan av funktionen
 
-x = 4.5; % Startgissning (måste ändras för nu divergerar funtionen wierd)
+x = 4.49; % Startgissning (måste ändras för nu divergerar funtionen wierd)
 tol = 1e-8; % Tolerans
 diffx = 1; iter = 0; maxiter = 100;
 
@@ -14,7 +14,7 @@ while diffx > tol && iter < maxiter % sålänge diff är större än tolerasen
     x = xnew ; % Uppdatera xn med värdet av xn+1, alltså stargissningen uppdateras
     disp ([ iter xnew diffx ]) % Utskrift pa skarmen
  end
-Th=xnew %resultat
+T_newton=x %resultat
 
 
 %---------_________________-----------------_______________________-----------------------___________________
@@ -38,19 +38,17 @@ while diffx > tol && iter < maxiter % sålänge differensen är större än tole
     h1 = hnew; % uppdatera så att i andra iteration xn = xn+1 alltså den nya x värdet
     disp([iter, hnew, diffx]); 
 end
-T = hnew
+T_sekant = h1
 
 %---------------________________------------______________---------------______________---------------------
 
 %Uppgift 2c: Jämför konvergenshastigheten
 
 % #############  Kopiera sekants metod ################
-H = 0.5;
-g = @(x) 8 * exp(-x/2) * cos(3 * x) - H;
+
 % Startgissning
 h0 = 4; 
 h1 = 5;
-tol = 1e-8; % Tolerans
 diffx = []; % Difference till en vector för att lagra skillnader |h_{n+1} - h_n| för olika n ={0,1,2....}
 iter = 0;
 maxiter = 100; % Maximalt antal iterationer
@@ -65,11 +63,8 @@ while iter < maxiter
     h1 = hnew;
 end
 %###########  kopiera Newtons metod  ###############
-H = 0.5;
-f = @(x) 8 * exp(-x/2) * cos(3 * x) - H;
-fp = @(x) -4 * exp(-x/2) * cos(3 * x) + 24 * exp(-x/2) * sin(3 * x);
-x = 4.6; % Startgissning
-tol = 1e-8; % Tolerans
+
+x = 4.49; % Startgissning
 diffx1 = []; %Difference till en vector för att lagra skillnader |h_{n+1} - h_n| för olika n ={0,1,2....}
 iter1 = 0; maxiter = 100;
 while iter1 < maxiter
@@ -81,9 +76,9 @@ while iter1 < maxiter
 
 % ###############  Plotta konvergenshastigheten  ################
 figure;
-semilogy(0:length(diffx)-1, diffx);
+semilogy(1:length(diffx), diffx,'LineWidth',2);
 hold on;
-semilogy(0:length(diffx1)-1, diffx1);
+semilogy(1:length(diffx1), diffx1, 'LineWidth',2);
 
 grid on;
 
@@ -98,7 +93,7 @@ legend('Sekant', 'Newton');
 % Uppgift 2d (måste fixa probelemt med startgissning, samma problem som i 2a)
 H = 2.8464405473 ; % byt H = 2.8464405473 
 v = @(x) 8 * exp(-x/2) * cos(3 * x) - H; % funktionen
-vp = @(x) -4 * exp(-x/2) * cos(3 * x) + 24 * exp(-x/2) * sin(3 * x); % derivatan av funktionen
+vp = @(x) -4 * exp(-x/2) * cos(3 * x) - 24 * exp(-x/2) * sin(3 * x); % derivatan av funktionen
 
 x = 0.4; % Startgissning (måste ändras för nu divergerar funtionen wierd)
 tol = 1e-8; % Tolerans
@@ -111,4 +106,4 @@ while diffx > tol && iter < maxiter % sålänge diff är större än tolerasen
     x = xnew ; % Uppdatera xn med värdet av xn+1, alltså stargissningen uppdateras
     disp ([ iter xnew diffx ]) % Utskrift pa skarmen
  end
-Tt=xnew %resultat
+TN=x %resultat
