@@ -6,23 +6,45 @@ A = [175, 950;
      410, 2400;
      675, 1730];
 
+xA=[175, 410, 675]';
+yA=[950,2400,1730]';
+
 % vektor av alla xB och yB värdena för P1,P2 och P3
 %    xB , yB
 B = [160, 1008;
       381, 2500 ;
       656, 1760];
 
+xB=[160,381,656];
+yB=[1008, 2500, 1760];
+
 % vektor av alla avstånd mellan xA, xB värdena och P1,P2 och P3
 %     LA , LB
-L = [ 60 , 46;
+L = [ 60 , 45;
       75 , 88;
       42 , 57];
+
+LA=[60, 75, 42];
+LB=[45, 88, 57];
 
 %funtionen: 2 ekvationssystem för en Punkt. 6 okända. 
 % (x-xA)^2 +(y-yA)^2=LA^2
 % (x-xB)^2 +(y-yB)^2=LB^2
 % x och y värdena är okända som vi ska hitta och xA,xB samt yA,yB värden
 % tas från vektor A och B
+
+
+g = @(x,y) [
+    (x-xA).^2 + (y-yA).^2 - LA.^2;
+    (x-xB).^2 + (y-yB).^2 - LB.^2;
+    
+    ]
+Jg = @(x,y) [
+    2* (x - xA), 2*(y - yA);
+    2* (x - xB), 2*(y - yB);
+
+    ]
+
 
 f = @(x1,y1,x2,y2,x3,y3) [
     (x1 - A(1,1))^2 + (y1 - A(1,2))^2 + 0 + 0 + 0 + 0 - (L(1,1)^2);
@@ -34,6 +56,8 @@ f = @(x1,y1,x2,y2,x3,y3) [
 
    
 ];
+
+
 
 
 % komponenterna i Jacobianen: derivatan
@@ -142,9 +166,9 @@ ylabel('Normen')
 % Ac=b
 P0=[0;0];
 P4=[1020;0];
-rot_y = [P0(2), rotP11(2), rotP21(2), rotP31(2), P4(2)]';
-rot_x = [P0(1), rotP11(1), rotP21(1), rotP31(1), P4(1)]';
-d = length(b);
+rot_y = [P0(2), rotP11(2), rotP21(2), rotP32(2), P4(2)]';
+rot_x = [P0(1), rotP11(1), rotP21(1), rotP32(1), P4(1)]';
+d = length(rot_y);
 
 
 A1 = [ones(d, 1), rot_x, rot_x.^2, rot_x.^3, rot_x.^4];
@@ -169,13 +193,5 @@ plot(rot_x,rot_y,'o','LineWidth',2)
 xlabel('x-koordinater')
 ylabel('ykoordinater')
 
+fprintf("%.10f\n",c(5))
 
-%{
-figure;
-grid on;
-fplot(p,[0,1020],'LineWidth',1);
-hold on;
-plot(A(:,2),b,'o','LineWidth',2)
-xlabel('x-koordinater')
-ylabel('ykoordinater')
-%}
