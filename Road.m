@@ -9,7 +9,7 @@ yB = [1008, 2500, 1760]';
 LA = [60, 75, 42]';
 LB = [45, 88, 57]';
 
-% Function for nonlinear system
+% funktion
 g = @(x,y,xA,yA,xB,yB,LA,LB) [
     (x - xA)^2 + (y - yA)^2 - LA^2;
     (x - xB)^2 + (y - yB)^2 - LB^2;
@@ -21,18 +21,18 @@ Jg = @(x,y,xA,yA,xB,yB) [
     2 * (x - xB), 2 * (y - yB);
 ];
 
-% Initial guesses
-x = [200, 460, 700]';
+% Startgissning för p1 p2 och p3
+x = [200, 460, 700]'; 
 y = [1000, 2500, 1700]';
 
-% Tolerance
+% tolerans
 tol = 1e-11;
 
-% Store results
+% Final, spara värderna
 xrot = zeros(3,1);
 yrot = zeros(3,1);
 
-% Loop over each point (P1, P2, P3)
+% Loopa över (P1, P2, P3) och xA yA xB yB LA och LB
 for i = 1:3    
     xi = x(i);
     yi = y(i);
@@ -51,7 +51,7 @@ for i = 1:3
     while hnorm > tol && iter < 20
         iter = iter + 1;
         J = Jg(xi,yi,xa,ya,xb,yb);
-        g_val = g(xi,yi,xa,ya,xb,yb,La,Lb); % Get function values
+        g_val = g(xi,yi,xa,ya,xb,yb,La,Lb); % funktionens värden
 
             h = -J \ g_val; 
             xi = xi + h(1);  
@@ -61,12 +61,12 @@ for i = 1:3
         
     end
 
-    % Store results
+    % Spara värderna
     xrot(i) = xi;
     yrot(i) = yi;
 end
 
-% Display results
+% Utskrift av resultatet
 disp('x och y koordinater för P1 P2 och P3');
 disp([xrot, yrot]);
 
@@ -76,6 +76,11 @@ xlabel('iterationer')
 ylabel('Normen')
 title('Konvergenshastighet');
 
+% Vad blir koordinaterna? => P1(204.6, 1002.2) P2 = (458.1, 2457.6) P3=
+% (712.1,1749.7)
+%Hur kan du förvissa dig om att Newtons metod konvergerar = > I grafen syns
+%det tydligt att newtons metod konvergerar som den ska?
+% Vilken konvergenshastighet ser du? => Kvadrtiskt minskning
 
 % ____________----------_____________---------------_____________------------_________________------------
 % Uppgift 3b
@@ -108,3 +113,4 @@ title('Interpolation');
 
 fprintf("%.10f\n",c(5))
 
+% Koefficienterna blir c0=0, c1= -0.5836, c2 = -0.0417, c3 = -0.0001 och c4 = 0.0000000397
