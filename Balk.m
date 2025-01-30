@@ -3,12 +3,12 @@ H = 0.5;
 f = @(x) 8 * exp(-x/2) * cos(3 * x) - H; % funktionen
 fp = @(x) -4 * exp(-x/2) * cos(3 * x) - 24 * exp(-x/2) * sin(3 * x); % derivatan av funktionen
 
-x = 4.49; % Startgissning (måste ändras för nu divergerar funtionen wierd)
+x = 4.49; % Startgissning 
 tol = 1e-8; % Tolerans
 diffx = 1; iter = 0; maxiter = 100;
-res_newton=[];%uppgift 2c
+res_newton=[];% uppgift 2c
 
-while diffx > tol && iter < maxiter % sålänge diff är större än tolerasen
+while diffx > tol && iter < maxiter % 
     iter = iter + 1; % öka antal iterationer
     xnew = x - (f ( x ) / fp ( x )) ; % Räkna xn+1=xn-(f(x)/f'(x)) 
     diffx = abs ( xnew - x ) ; % skillnaden/längden mellan två pinkter:  | x ( n +1) -x ( n ) |
@@ -18,31 +18,45 @@ while diffx > tol && iter < maxiter % sålänge diff är större än tolerasen
  end
 T_newton=x %resultat
 
-
+% Startgissningen är 4.49
+% Antal iterationer blev 3
+% Resultatet blev T = 4.5007
 %---------_________________-----------------_______________________-----------------------___________________
 
 % Uppgift 2b : Secant method 
-H=0.5;
+H=0.59;
 g = @(x) 8 * exp(-x/2) * cos(3 * x) - H; % funitionen
 % Startgissning
 h0 = 4; 
 h1 = 5;
+
 tol = 1e-8; % tolerans
 diffx = 1; % differensen
 iter = 0; % antal iterationer
 maxiter = 100;
 res_sekant=[]; % uppgift 2c
 
-while diffx > tol && iter < maxiter % sålänge differensen är större än toleransen
+while diffx > tol && iter < maxiter 
     iter = iter + 1; % Increment iteration 
     hnew = h1 - g(h1) * ((h1 - h0) / (g(h1) - g(h0))); % räkna xn+1 = xn-f(xn)*(x-xn)/f(xn)-f(x0) här är xn =h1 och x= h0
     diffx = abs(hnew - h1); % skillnaden/längden mellan två pinkter:  | x ( n +1) -x ( n ) |
     res_sekant=[res_sekant,diffx];
     h0 = h1;  % uppdatera så att i andra iteration x=h1
-    h1 = hnew; % uppdatera så att i andra iteration xn = xn+1 alltså den nya x värdet
+    h1 = hnew; % uppdatera så att i andra iteration xn = xn+1 eller hnew alltså den nya x värdet
     disp([iter, hnew, diffx]); 
 end
 T_sekant = h1
+
+%Vilka startvärden har använts? => startvärdena h0=4 och h1 = 4
+% Hur många iterationer krävdes => Totalkt krävdes 7 iterationer
+% vad blev resultatet? => Resultatet böev T = 4.5007
+% Behövs det fler eller färre steg med sekantmetoden för att nå
+% ett fel som är mindre än 10−8 än med Newtons metod? => Det behövs fler
+% steg i sekant metod jämfört med Netons metod
+%Varför är det på det ena eller andra sättet? = > Newtons method får vi den
+%exakta lutningen vid en punkt iom att vi har med första derivatan a
+%funktionen men i seknats method vlir det en approximation av derivatan.
+
 
 %---------------________________------------______________---------------______________---------------------
 
@@ -66,15 +80,20 @@ H = 2.8464405473 ; % byt H = 2.8464405473
 v = @(x) 8 * exp(-x/2) * cos(3 * x) - H; % funktionen
 vp = @(x) -4 * exp(-x/2) * cos(3 * x) - 24 * exp(-x/2) * sin(3 * x); % derivatan av funktionen
 
-x = 0.4; % Startgissning (måste ändras för nu divergerar funtionen wierd)
+x = 0.5; % Startgissning 
 tol = 1e-8; % Tolerans
 diffx = 1; iter = 0; maxiter = 100;
-
-while diffx > tol && iter < maxiter % sålänge diff är större än tolerasen
+res2 = [];
+while diffx > tol && iter < maxiter 
     iter = iter + 1; % öka anta iterationer
     xnew = x - (v ( x ) / vp ( x )) ; % Räkna xn+1=xn-(f(x)/f'(x)) 
     diffx = abs ( xnew - x ) ; % skillnaden/längden mellan två pinkter:  | x ( n +1) -x ( n ) |
+    res2=[res2,diffx];
     x = xnew ; % Uppdatera xn med värdet av xn+1, alltså stargissningen uppdateras
     disp ([ iter xnew diffx ]) % Utskrift pa skarmen
  end
 TN=x %resultat
+
+%Studera kon-vergenshastighet och känsligheten vad gäller val av startgissning. jämfört med a) på? 
+% => minsta ändring i stargissning i uppgift a kan minska antal iterationer
+% drastiskt men inte i sekant metoden
