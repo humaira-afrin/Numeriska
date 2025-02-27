@@ -1,8 +1,8 @@
 clear all
 
-function [A,b,ri,N,T] = diskretisering_temperatur(N,alfa,k,r0,rN1,Te,T0)
+function [A,b,ri,N,T,TN1] = diskretisering_temperatur(N,alfa,k,r0,rN1,Te,T0)
     tol = 0.1;
-    TN1_old = 20; % Initial guess
+    TN1_old = Te; % Initial guess
     err = 1;
 
     while err > tol
@@ -28,9 +28,7 @@ function [A,b,ri,N,T] = diskretisering_temperatur(N,alfa,k,r0,rN1,Te,T0)
 
         T = A\b;
 
-        TN1 = T(end);   % wrong
-        %TN1 = -((T(end-1)*(ri(end)/(h^2) - 1/(2*h)) +
-        %T(end)*(-2*ri(end)))/(ri(end)/(h^2) + 1/(2*h)));  wrong
+        TN1 = (Te*alfa*h + T(N)*k) / (k + alfa*h);
         err = abs(TN1-TN1_old);
         TN1_old = TN1;
         N = 2 * N;
@@ -47,7 +45,7 @@ r0 = 1; rN1 = 2;     % Randpunkter
 T0 = 450;       % Första randvärde
 
 
-[A,b,ri,N,T] = diskretisering_temperatur(N,alfa,k,r0,rN1,Te,T0);
+[A,b,ri,N,T,TN1] = diskretisering_temperatur(N,alfa,k,r0,rN1,Te,T0);
 
-T(end)
+TN1
 %plot([1;ri;N],[T0;T;T(end)] ,'--o ')   wrong
