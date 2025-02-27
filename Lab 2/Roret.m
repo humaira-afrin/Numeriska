@@ -3,16 +3,16 @@ clear all
 % Funktionen används i uppgift c) och beräknar värden på T
 function [A,b,ri,N,T,TN1] = diskretisering_temperatur(N,alfa,k,r0,rN1,Te,T0)
     tol = 0.1;
-    TN1_old = Te; % Initial guess
+    TN1_old = Te; % Initial guess av vad T_(N+1) blir
     err = 1; % Initierar error. 1 har ingen mening
     
     % Loppen behövs för att testa olika N värden och nogrannheten
     while err > tol
         h = 1/(N+1);    % Steglängd 
-        ri = [r0+h:h:rN1-h]';   %Inre punkter (r1, r2, r3, r4 ...) 
+        ri = [r0+h:h:rN1-h]';   % Inre punkter (r1, r2, r3, r4, ...,rN) 
     
         A = zeros(N,N);     % Sätter upp matris A
-        A(1,1:2) = [(-2*ri(1))/(h^2)  ri(1)/(h^2)+1/(2*h)];   % Första raden
+        A(1,1:2) = [(-2*ri(1))/(h^2)  ri(1)/(h^2)+1/(2*h)];   % Första raden och första två columner
         
         % Loopar igenom olika i för att beräkna vad Ti blir med hjälp av
         % finita differensmetoden (centrala differenser)
@@ -21,8 +21,10 @@ function [A,b,ri,N,T,TN1] = diskretisering_temperatur(N,alfa,k,r0,rN1,Te,T0)
             A(i,i) = (-2*ri(i))/(h^2);            % T_(i)
             A(i,i+1) = ri(i)/(h^2) + 1/(2*h);   % T_(i+1)
         end
-
-        A(N,N-1:N) = [ri(N)/(h^2)-1/(2*h)  (-2*ri(N))/(h^2)+(k*ri(N))/(k*(h^2)+alfa*h^3)+k/(k*2*h+2*alfa*h^2)]; % Sista raden
+        
+        % Sista raden och sista två kolumner
+        A(N,N-1:N) = [ri(N)/(h^2)-1/(2*h)  (-2*ri(N))/(h^2)+(k*ri(N))/(k*(h^2)+alfa*h^3)+k/(k*2*h+2*alfa*h^2)];
+        
         A = sparse(A); % Spara den som gles matris
 
         b = zeros(N,1); % Sätter upp matris b
@@ -33,7 +35,7 @@ function [A,b,ri,N,T,TN1] = diskretisering_temperatur(N,alfa,k,r0,rN1,Te,T0)
         T = A\b; % Räknar ut värden på T_1, T_2, T_3, ... T_N
 
         TN1 = (Te*alfa*h + T(N)*k) / (k + alfa*h); % Räknar ut värden på T_(N+1)
-        err = abs(TN1-TN1_old); % Räknar ut vad felet är (skillnaden mellan nya T_(N+1) och gamla T_(N+1)
+        err = abs(TN1-TN1_old); % Räknar ut vad felet är (skillnaden mellan nya T_(N+1) och gamla T_(N+1))
         TN1_old = TN1; % Förnyar gamla värdet på T_(N+1)
         N = 2 * N;
     end
@@ -46,7 +48,7 @@ function TN1 = diskretisering_temperatur_alfa(N,alfa,k,r0,rN1,Te,T0)
         ri = [r0+h:h:rN1-h]';   %Inre punkter (r1, r2, r3, r4 ...) 
     
         A = zeros(N,N);     % Sätter upp matris A
-        A(1,1:2) = [(-2*ri(1))/(h^2)  ri(1)/(h^2)+1/(2*h)];   % Första raden
+        A(1,1:2) = [(-2*ri(1))/(h^2)  ri(1)/(h^2)+1/(2*h)];   % Första raden och första två columner
 
         % Loopar igenom olika i för att beräkna vad Ti blir med hjälp av
         % finita differensmetoden (centrala differenser)
@@ -56,7 +58,9 @@ function TN1 = diskretisering_temperatur_alfa(N,alfa,k,r0,rN1,Te,T0)
             A(i,i+1) = ri(i)/(h^2) + 1/(2*h);   % T_(i+1)
         end
 
-        A(N,N-1:N) = [ri(N)/(h^2)-1/(2*h)  (-2*ri(N))/(h^2)+(k*ri(N))/(k*(h^2)+alfa*h^3)+k/(k*2*h+2*alfa*h^2)]; % Sista raden
+        % Sista raden och sista två kolumner
+        A(N,N-1:N) = [ri(N)/(h^2)-1/(2*h)  (-2*ri(N))/(h^2)+(k*ri(N))/(k*(h^2)+alfa*h^3)+k/(k*2*h+2*alfa*h^2)];
+        
         A = sparse(A); % Spara den som gles matris
 
         b = zeros(N,1); % Sätter upp matris b
