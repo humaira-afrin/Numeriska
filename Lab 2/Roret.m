@@ -4,15 +4,18 @@ clear all
 function [A,b,ri,N,T,TN1] = diskretisering_temperatur(N,alfa,k,r0,rN1,Te,T0)
     tol = 0.1;
     TN1_old = Te; % Initial guess
-    err = 1;
-
+    err = 1; % Initierar error. 1 har ingen mening
+    
+    % Loppen behövs för att testa olika N värden och nogrannheten
     while err > tol
         h = 1/(N+1);    % Steglängd 
         ri = [r0+h:h:rN1-h]';   %Inre punkter (r1, r2, r3, r4 ...) 
     
         A = zeros(N,N);     % Sätter upp matris A
         A(1,1:2) = [(-2*ri(1))/(h^2)  ri(1)/(h^2)+1/(2*h)];   % Första raden
-
+        
+        % Loopar igenom olika i för att beräkna vad Ti blir med hjälp av
+        % finita differensmetoden (centrala differenser)
         for i = 2:N-1
             A(i,i-1) = ri(i)/(h^2) - 1/(2*h);   % T_(i-1)
             A(i,i) = (-2*ri(i))/(h^2);            % T_(i)
@@ -34,7 +37,7 @@ function [A,b,ri,N,T,TN1] = diskretisering_temperatur(N,alfa,k,r0,rN1,Te,T0)
         TN1_old = TN1; % Förnyar gamla värdet på T_(N+1)
         N = 2 * N;
     end
-    N = N/2;
+    N = N/2; % I slutet av while-loopen multiplicerades den onödigt och vi vill få det rätta värdet
 end
 
 % Funktionen används i uppgift d) och beräknar T_(N+1)
@@ -45,6 +48,8 @@ function TN1 = diskretisering_temperatur_alfa(N,alfa,k,r0,rN1,Te,T0)
         A = zeros(N,N);     % Sätter upp matris A
         A(1,1:2) = [(-2*ri(1))/(h^2)  ri(1)/(h^2)+1/(2*h)];   % Första raden
 
+        % Loopar igenom olika i för att beräkna vad Ti blir med hjälp av
+        % finita differensmetoden (centrala differenser)
         for i = 2:N-1
             A(i,i-1) = ri(i)/(h^2) - 1/(2*h);   % T_(i-1)
             A(i,i) = (-2*ri(i))/(h^2);            % T_(i)
