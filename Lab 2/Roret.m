@@ -47,5 +47,16 @@ T0 = 450;       % Första randvärde
 
 [A,b,ri,N,T,TN1] = diskretisering_temperatur(N,alfa,k,r0,rN1,Te,T0);
 
-TN1
-%plot([1;ri;N],[T0;T;T(end)] ,'--o ')   wrong
+rx = [r0; ri; rN1];
+Ty = [T0; T; TN1];
+
+% Rita temperaturfördelningen
+figure;
+plot(rx, Ty, '-o', 'LineWidth', 1);
+xlabel('r');
+ylabel('T');
+title('Temperaturfördelning i cylinderväggen');
+grid on;
+
+fprintf('Sista N värde: %d\n', N/2);
+fprintf('Sista T värde: %.2f\n', TN1);
